@@ -61,64 +61,10 @@ def epsilon_lexicase_selection(population):
 
     return new_pop #return [ind for ind in population if ind.selected==1]
 
-def mad(x, axis=None):
-    """median absolute deviation statistic"""
-    return np.median(np.abs(x - np.median(x, axis)), axis)
-
-def epsilon_lexicase_selection(population):
-    """Return a list of selected individuals from the population.
-
-    Individuals are selected by filtering on randomized orderings of time steps for each parent selection. 
-    Each selection:
-    1. start with whole population
-    2. choose a random time window
-    3. filter out any individuals that aren't within epsilon of the best performance in that window
-    4. while there are still individuals and cases, repeat 3 with another time window
-    5. return a random ind from the pool
-    Parameters
-    ----------
-    population : Population
-        This provides the individuals for selection.
-
-    Returns
-    -------
-    new_population : list
-        A list of selected individuals.
-
-    """
-    new_pop = []
-    # pdb.set_trace()
-    F = np.array( [n.deltaNormDist for n in population.individuals])
-    #print('F:', F)
-    individual_locs = np.arange(len(population))
-    # calculate epsilon thresholds based on median absolute deviation (MAD)
-    mad_for_case = np.array([mad(f) for f in F.transpose()])
-    for i in np.arange(population.pop_size):
-
-        can_locs = individual_locs
-        cases = list(np.arange(F.shape[1]))
-        np.random.shuffle(cases)
-        # pdb.set_trace()
-        while len(cases) > 0 and len(can_locs) > 1:
-            # get best fitness for case among candidates
-            best_val_for_case = np.max(F[can_locs,cases[0]])
-            # filter individuals without an elite fitness on this case
-            can_locs = [l for l in can_locs if F[l,cases[0]] >= best_val_for_case - mad_for_case[cases[0]]]
-            cases.pop(0)
-
-        choice = np.random.randint(len(can_locs))
-        new_pop.append(population[can_locs[choice]]) 
-    
-    for ind in population:
-        if ind in new_pop:
-            ind.selected = 1
-        else:
-            ind.selected = 0
-
-    return new_pop #return [ind for ind in population if ind.selected==1]
 
 def pareto_selection(population):
-    """Return a list of selected individuals from the population.  
+    """Return a list of selected individuals from the population.
+
     All individuals in the population are ranked by their level, i.e. the number of solutions they are dominated by.
     Individuals are added to a list based on their ranking, best to worst, until the list size reaches the target
     population size (population.pop_size).
