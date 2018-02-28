@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+*.a
 # Distribution / packaging
 .Python
 env/
@@ -64,7 +64,8 @@ evosoro/_voxcad_forTransfer
 #evosoro/examples/*_*
 evosoro/examples/plotAfpoTraces.py
 evosoro/examples/*_data
-
+evosoro/_voxcad/voxelyzeMain/voxelyze
+evosoro/_voxcad/release/
 
 evosoro/pbs/
 evosoro/data_analysis/

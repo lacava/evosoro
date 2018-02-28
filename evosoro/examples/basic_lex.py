@@ -41,7 +41,7 @@ sys.path.append(os.getcwd() + "/../..")
 from evosoro.base import Sim, Env, ObjectiveDict
 from evosoro.networks import CPPN
 from evosoro.softbot import Genotype, Phenotype, Population
-from evosoro.tools.algorithms import ParetoOptimization
+from evosoro.tools.algorithms import LexicaseOptimization 
 from evosoro.tools.utils import count_occurrences, make_material_tree
 from evosoro.tools.checkpointing import continue_from_checkpoint
 
@@ -54,10 +54,11 @@ sub.call("cp ../" + VOXELYZE_VERSION + "/voxelyzeMain/voxelyze .", shell=True)  
 # sub.call("chmod 755 ./qhull", shell=True)  # Execution right for qhull
 
 
-NUM_RANDOM_INDS = 1  # Number of random individuals to insert each generation
+NUM_RANDOM_INDS = 0  # Number of random individuals to insert each generation
 MAX_GENS = 100  # Number of generations
 POPSIZE = 30  # Population size (number of individuals in the population)
 IND_SIZE = (6, 6, 6)  # Bounding box dimensions (x,y,z). e.g. IND_SIZE = (6, 6, 6) -> workspace is a cube of 6x6x6 voxels
+# IND_SIZE = (10, 10, 10)  # Bounding box dimensions (x,y,z). e.g. IND_SIZE = (6, 6, 6) -> workspace is a cube of 6x6x6 voxels
 SIM_TIME = 5  # (seconds), including INIT_TIME!
 INIT_TIME = 1
 DT_FRAC = 0.9  # Fraction of the optimal integration step. The lower, the more stable (and slower) the simulation.
@@ -68,8 +69,8 @@ SAVE_LINEAGES = False
 MAX_TIME = 8  # (hours) how long to wait before autosuspending
 EXTRA_GENS = 0  # extra gens to run when continuing from checkpoint
 
-RUN_DIR = "basic_data"  # Subdirectory where results are going to be generated
-RUN_NAME = "Basic"
+RUN_DIR = "basic_lex_data"  # Subdirectory where results are going to be generated
+RUN_NAME = "Basic_lex"
 CHECKPOINT_EVERY = 1  # How often to save an snapshot of the execution state to later resume the algorithm
 SAVE_POPULATION_EVERY = 1  # How often (every x generations) we save a snapshot of the evolving population
 
@@ -131,7 +132,7 @@ class MyPhenotype(Phenotype):
 my_sim = Sim(dt_frac=DT_FRAC, simulation_time=SIM_TIME, fitness_eval_init_time=INIT_TIME)
 
 # Setting up the environment object
-my_env = Env(sticky_floor=0, time_between_traces=0)
+my_env = Env(sticky_floor=0, time_between_traces=0.1)
 
 # Now specifying the objectives for the optimization.
 # Creating an objectives dictionary
@@ -160,12 +161,14 @@ my_objective_dict.add_objective(name="energy", maximize=False, tag=None,
                                 node_func=partial(count_occurrences, keys=[3, 4]),
                                 output_node_name="material")
 
+# add deltaNormDist objective
+my_objective_dict.add_objective(name="deltaNormDist", maximize=True, tag="<deltaNormDist>")
 
 # Initializing a population of SoftBots
 my_pop = Population(my_objective_dict, MyGenotype, MyPhenotype, pop_size=POPSIZE)
 
 # Setting up our optimization
-my_optimization = ParetoOptimization(my_sim, my_env, my_pop)
+my_optimization = LexicaseOptimization(my_sim, my_env, my_pop)
 
 # And, finally, our main
 if __name__ == "__main__":

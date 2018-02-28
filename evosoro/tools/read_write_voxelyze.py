@@ -29,9 +29,17 @@ def read_voxlyze_results(population, print_log, filename="softbotsOutput.xml"):
         this_file = open(filename)  # TODO: is there a way to just go back to the first line without reopening the file?
         tag = details["tag"]
         if tag is not None:
+            count = 0
             for line in this_file:
                 if tag in line:
-                    results[rank] = float(line[line.find(tag) + len(tag):line.find("</" + tag[1:])])
+                    if count == 1: # there are multiple values
+                        vals = [results[rank]]
+                        results[rank] = vals
+                    elif count >1:
+                        results[rank].append(abs(float(line[line.find(tag) + len(tag):line.find("</" + tag[1:])])))
+                    else:
+                        results[rank] = abs(float(line[line.find(tag) + len(tag):line.find("</" + tag[1:])]))
+                    count += 1
         this_file.close()
 
     return results
