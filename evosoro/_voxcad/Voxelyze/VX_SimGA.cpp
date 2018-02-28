@@ -66,14 +66,22 @@ void CVX_SimGA::WriteResultFile(CXML_Rip* pXML)
 //			pXML->Element("NormRegimeDist", normRegimeDist);
 		pXML->UpLevel();
 
+<<<<<<< HEAD
 		if (pEnv->getTimeBetweenTraces() > 0)
 		{
             float deltaNormDist, prevNormDist, curNormDist; 
             float x_prev=0, y_prev=0, z_prev = 0;
+=======
+		if (pEnv->getTimeBetweenTraces() > 0) // && pEnv->getUsingSaveTraces())
+		{
+            float deltaNormDist, prevNormDist, curNormDist; 
+            /* float x_prev=0, y_prev=0, z_prev = 0; */ 
+>>>>>>> lex
 
 			pXML->DownLevel("CMTrace");
 				for(std::vector<vfloat>::size_type i = 0; i != SS.CMTraceTime.size(); ++i)
 				{
+<<<<<<< HEAD
                     if (i >0)
                     {
                         x_prev = SS.CMTrace[i-1].x;
@@ -88,10 +96,43 @@ void CVX_SimGA::WriteResultFile(CXML_Rip* pXML)
 
 	   				pXML->DownLevel("TraceStep");
 	   					pXML->Element("Time",SS.CMTraceTime[i]);
+=======
+                    if (i > 0 )
+                    {
+                        /* x_prev = SS.CMTrace[i-1].x; */
+                        /* y_prev = SS.CMTrace[i-1].y; */
+                        /* /1* z_prev = SS.CMTrace[i-1].z; *1/ */
+                        prevNormDist = curNormDist;
+                    }                      
+
+                    curNormDist = pow(pow(SS.CMTrace[i].x-IniCM.x,2)+pow(SS.CMTrace[i].y-IniCM.y,2),0.5)/LocalVXC.GetLatticeDim();
+                    
+                    // how did our distance from the origin change? 
+                    deltaNormDist = curNormDist - prevNormDist;
+                    
+                    pXML->DownLevel("TraceStep");
+                        pXML->Element("Time",SS.CMTraceTime[i]);
+>>>>>>> lex
 						pXML->Element("TraceX",SS.CMTrace[i].x);
 						pXML->Element("TraceY",SS.CMTrace[i].y);
 						pXML->Element("TraceZ",SS.CMTrace[i].z);
                         pXML->Element("deltaNormDist",deltaNormDist);
+<<<<<<< HEAD
+=======
+					pXML->UpLevel();
+				}
+			pXML->UpLevel();
+		}
+
+		if (pEnv->getUsingNormDistByVol() && pEnv->getUsingSaveTraces())
+		{
+			pXML->DownLevel("VolumeTrace");
+				for(std::vector<vfloat>::size_type i = 0; i != SS.VolTraceTime.size(); ++i)
+				{
+	   				pXML->DownLevel("TraceStep");
+	   					pXML->Element("Time",SS.VolTraceTime[i]);
+						pXML->Element("Volume",SS.VolTrace[i]);
+>>>>>>> lex
 					pXML->UpLevel();
 				}
 			pXML->UpLevel();

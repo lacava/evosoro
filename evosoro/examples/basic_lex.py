@@ -57,7 +57,8 @@ sub.call("cp ../" + VOXELYZE_VERSION + "/voxelyzeMain/voxelyze .", shell=True)  
 NUM_RANDOM_INDS = 0  # Number of random individuals to insert each generation
 MAX_GENS = 100  # Number of generations
 POPSIZE = 30  # Population size (number of individuals in the population)
-IND_SIZE = (10, 10, 10)  # Bounding box dimensions (x,y,z). e.g. IND_SIZE = (6, 6, 6) -> workspace is a cube of 6x6x6 voxels
+IND_SIZE = (6, 6, 6)  # Bounding box dimensions (x,y,z). e.g. IND_SIZE = (6, 6, 6) -> workspace is a cube of 6x6x6 voxels
+# IND_SIZE = (10, 10, 10)  # Bounding box dimensions (x,y,z). e.g. IND_SIZE = (6, 6, 6) -> workspace is a cube of 6x6x6 voxels
 SIM_TIME = 5  # (seconds), including INIT_TIME!
 INIT_TIME = 1
 DT_FRAC = 0.9  # Fraction of the optimal integration step. The lower, the more stable (and slower) the simulation.
@@ -178,7 +179,7 @@ if __name__ == "__main__":
     #                     save_vxa_every=SAVE_POPULATION_EVERY, save_lineages=SAVE_LINEAGES)
 
     # Here is how to use the checkpointing mechanism
-    if not os.path.isfile("./" + RUN_DIR + "/checkpoint.pickle"):
+    if not os.path.isfile("./" + RUN_DIR + "/pickledPops/Gen_0.pickle"):
         # start optimization
         my_optimization.run(max_hours_runtime=MAX_TIME, max_gens=MAX_GENS, num_random_individuals=NUM_RANDOM_INDS,
                             directory=RUN_DIR, name=RUN_NAME, max_eval_time=MAX_EVAL_TIME,

@@ -39,7 +39,8 @@ def read_voxlyze_results(population, print_log, filename="softbotsOutput.xml"):
                     else:
                         results[rank] = abs(float(line[line.find(tag) + len(tag):line.find("</" + tag[1:])]))
                     count += 1
-    #pdb.set_trace() # TODO: make this handle multiple values 
+        this_file.close()
+
     return results
 
 
