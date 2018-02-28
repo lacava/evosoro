@@ -64,8 +64,9 @@ evosoro/_voxcad_forTransfer
 #evosoro/examples/*_*
 evosoro/examples/plotAfpoTraces.py
 evosoro/examples/*_data
-evosoro/_voxcad/voxelyzeMain/voxelyze
 evosoro/_voxcad/release/
+evosoro/_voxcad/release/VoxCad
+evosoro/_voxcad/voxelyzeMain/voxelyze
 
 evosoro/pbs/
 evosoro/data_analysis/
