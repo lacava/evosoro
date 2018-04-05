@@ -1,5 +1,11 @@
 evosoro: soft robot simulator
 =======================================
+This is a fork of the evosoro robot simulator that implements some behavioral search drivers for analysis and comparison. See [this video](https://www.youtube.com/watch?v=2q0Xd7sfLVI&t=15s) for some examples. 
+
+This fork is the basis of La Cava, W., Moore, J.H. "Behavioral search drivers and the role of elitism in soft robotics". Submitted to ALIFE 2018.
+    
+It builds upon the work below: 
+
 
 <div class="row">
 <a href=https://youtu.be/EXuR_soDnFo>
